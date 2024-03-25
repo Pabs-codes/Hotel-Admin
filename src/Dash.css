@@ -1,0 +1,71 @@
+.dashboard-container {
+    margin: 20px;
+}
+
+.dashboard-heading {
+    text-align: center;
+}
+
+.clear-all-btn {
+    margin-bottom: 10px;
+}
+
+.reservation-table {
+    width: 100%;
+    /* border-collapse: collapse; */
+  
+}
+
+.reservation-table th,
+.reservation-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.reservation-table th {
+    background-color: #f2f2f2;
+}
+
+.reservation-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.reservation-table tr:hover {
+    background-color: #f2f2f2;
+}
+
+.delete-btn {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.delete-btn:hover {
+    background-color: #d32f2f;
+}
+
+.clear-all-btn {
+    margin-bottom: 10px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+}
+
+.clear-all-btn:hover {
+    background-color: #d32f2f;
+}
+
+.clear-all-btn::before {
+    content: '\26A0'; /* Unicode character for warning emoji */
+    margin-right: 8px;
+    font-size: 20px;
+}
