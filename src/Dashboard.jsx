@@ -7,115 +7,61 @@ import './Dash.css';
 import Logout from './Logout';
 
 function Dashboard() {
+    const [error, setError] = useState(null);
+    const [msg, setMsg] = useState(null);
     const [reservations, setReservations] = useState([]);
 
-    // Dummy data for demonstration
-    useEffect(() => {
-        // Fetch reservations data from backend API here
-        // Example:
-        // fetch('your_backend_api_endpoint')
-        //     .then(response => response.json())
-        //     .then(data => setReservations(data))
-        //     .catch(error => console.error('Error fetching reservations:', error));
-
-        // Dummy data for demonstration
-        const dummyData = [
-            {
-                id: 1,
-                name: 'John Doe',
-                company: 'ABC Company',
-                phone: '123-456-7890',
-                email: 'john@example.com',
-                eventDate: '03/30/2024',
-                startTime: '09:00 AM',
-                eventType: 'Conference',
-                mealType: 'Lunch',
-                numberOfPeople: 50,
-                equipment: 'Projector, Microphones',
-                remarks: 'Special dietary requirements for some guests'
-            },
-            {
-                id: 2,
-                name: 'Jane Smith',
-                company: 'XYZ Corporation',
-                phone: '987-654-3210',
-                email: 'jane@example.com',
-                eventDate: '04/05/2024',
-                startTime: '02:00 PM',
-                eventType: 'Wedding',
-                mealType: 'Dinner',
-                numberOfPeople: 100,
-                equipment: 'Sound System, DJ Setup',
-                remarks: 'Vegetarian meal preference for the entire party'
-            },
-            {
-                id: 2,
-                name: 'Jane Smith',
-                company: 'XYZ Corporation',
-                phone: '987-654-3210',
-                email: 'jane@example.com',
-                eventDate: '04/05/2024',
-                startTime: '02:00 PM',
-                eventType: 'Wedding',
-                mealType: 'Dinner',
-                numberOfPeople: 100,
-                equipment: 'Sound System, DJ Setup',
-                remarks: 'Vegetarian meal preference for the entire party'
-            },
-            {
-                id: 2,
-                name: 'Jane Smith',
-                company: 'XYZ Corporation',
-                phone: '987-654-3210',
-                email: 'jane@example.com',
-                eventDate: '04/05/2024',
-                startTime: '02:00 PM',
-                eventType: 'Wedding',
-                mealType: 'Dinner',
-                numberOfPeople: 100,
-                equipment: 'Sound System, DJ Setup',
-                remarks: 'Vegetarian meal preference for the entire party'
-            },
-            {
-                id: 2,
-                name: 'Jane Smith',
-                company: 'XYZ Corporation',
-                phone: '987-654-3210',
-                email: 'jane@example.com',
-                eventDate: '04/05/2024',
-                startTime: '02:00 PM',
-                eventType: 'Wedding',
-                mealType: 'Dinner',
-                numberOfPeople: 100,
-                equipment: 'Sound System, DJ Setup',
-                remarks: 'Vegetarian meal preference for the entire party'
-            },
-            {
-                id: 2,
-                name: 'Jane Smith',
-                company: 'XYZ Corporation',
-                phone: '987-654-3210',
-                email: 'jane@example.com',
-                eventDate: '04/05/2024',
-                startTime: '02:00 PM',
-                eventType: 'Wedding',
-                mealType: 'Dinner',
-                numberOfPeople: 100,
-                equipment: 'Sound System, DJ Setup',
-                remarks: 'Vegetarian meal preference for the entire party'
+    const getReservations = () => {
+        fetch('http://localhost/backend/admin/view-reservations.php',{
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token') || ''
             }
-        ];
+        
+        })
+            .then(response => response.json())
+            .then(res => {
+                if(res.status === 'success') {
+                    setReservations(res.data);
+                }
+                else {
+                    setError('Error fetching reservations');
+                    console.error(res.message);
+                }
 
-        setReservations(dummyData);
+            })
+            .catch(error => console.error('Error fetching reservations:', error));
+    }
+
+    useEffect(() => {
+        getReservations();
     }, []);
 
     // Function to delete a reservation
     const deleteReservation = id => {
         const confirmDelete = window.confirm('Are you sure you want to delete this reservation?');
         if (confirmDelete) {
-            const updatedReservations = reservations.filter(reservation => reservation.id !== id);
-            setReservations(updatedReservations);
-            // Add logic to delete reservation from backend API here
+            fetch(`http://localhost/backend/admin/delete-reservation.php?id=${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token') || ''
+                }
+            })
+                .then(response => response.json())
+                .then(res => {
+                    if(res.status === 'success') {
+                        setMsg(res.message);
+                        getReservations();
+                    }
+                    else {
+                        setError(res.message); 
+                    }
+                })
+                .catch(error => console.error('Error deleting reservation:', error));
         }
     };
 
@@ -130,6 +76,14 @@ function Dashboard() {
 
     return (
         <div className='dashboard-container'>
+            <span>
+                {error !== ""  && 
+                <span className='error'>{error}</span>
+                }
+                {msg !== ""  &&
+                <span className='success'>{msg}</span>
+                }
+            </span>
             <div style={{float:'right'}}>
                 <Logout/>
             </div>
@@ -153,7 +107,8 @@ function Dashboard() {
                     </tr>
                 </thead>
                 <tbody>
-                    {reservations.map(reservation => (
+                    {
+                        reservations.map(reservation => (
                         <tr key={reservation.id}>
                             <td>{reservation.name}</td>
                             <td>{reservation.company}</td>
@@ -171,8 +126,13 @@ function Dashboard() {
                             </td>
                         </tr>
                     ))}
+
+                    
                 </tbody>
             </table>
+                    {
+                        reservations.length === 0 && <span className='no-reservations'>No reservations available</span>
+                    }
         </div>
     );
 }

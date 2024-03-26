@@ -138,7 +138,7 @@ function Login() {
     function loginSubmit() {
         if (user !== "" && pass !== "") {
             var token;
-            var url = "http://localhost/backend/login.php";
+            var url = "http://localhost/backend/admin/login.php";
             var headers = {
                 "Accept": "application/json",
                 "Content-type": "application/json",
