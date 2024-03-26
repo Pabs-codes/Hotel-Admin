@@ -137,7 +137,8 @@ function Login() {
 
     function loginSubmit() {
         if (user !== "" && pass !== "") {
-            var url = "http://localhost/react/login.php";
+            var token;
+            var url = "http://localhost/backend/login.php";
             var headers = {
                 "Accept": "application/json",
                 "Content-type": "application/json",
@@ -150,14 +151,28 @@ function Login() {
                 method: "POST",
                 headers: headers,
                 body: JSON.stringify(Data)
-            }).then((response) => response.json())
+            })
             .then((response) => {
-                if (response[0].result) {
-                    setMsg(response[0].result);
+                token = response.headers.get('Authorization');
+                return response.json();
+            })
+            .then((response) => {
+                if (response.status==='success') {
+                    if (token) {
+                        localStorage.setItem('token', token.split(' ')[1]);
+                        setTimeout(function() {
+                            window.location.href = "/dashboard";
+                        }, 2000);
+                        setMsg(response.message);
+                    }
+                    else {
+                        throw new Error("Token not found in response");
+                    }
                 } else {
-                    setError("Invalid credentials");
+                    setError(response.message);
                 }
-            }).catch((err) => {
+            })
+            .catch((err) => {
                 setError("Error occurred while logging in");
                 console.log(err);
             });

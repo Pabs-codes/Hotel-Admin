@@ -4,6 +4,7 @@
 
 import  { useState, useEffect } from 'react';
 import './Dash.css';
+import Logout from './Logout';
 
 function Dashboard() {
     const [reservations, setReservations] = useState([]);
@@ -129,6 +130,9 @@ function Dashboard() {
 
     return (
         <div className='dashboard-container'>
+            <div style={{float:'right'}}>
+                <Logout/>
+            </div>
             <h2 className='dashboard-heading'>Admin Panel - SunshineGrand</h2>
             <button onClick={clearAllReservations} className='clear-all-btn'>Clear All Reservations</button>
             <table className='reservation-table'>
