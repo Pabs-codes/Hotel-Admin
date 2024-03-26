@@ -1,7 +1,7 @@
 export default function Logout() {
     const handleLogout = () => {
         localStorage.removeItem("token");
-        window.location.reload();
+        window.location.href = "/?status=success&message=Logout successful";
     }
 
     return (

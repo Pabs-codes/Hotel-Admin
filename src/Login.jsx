@@ -106,29 +106,36 @@ import './Style.css'
 function Login() {
     const [user, setUser] = useState("");
     const [pass, setPass] = useState("");
-    const [error, setError] = useState("");
-    const [msg, setMsg] = useState("");
+    const [msg, setMsg] = useState({type: "", text: ""});
+
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const status = params.get('status');
+        const message = params.get('message');
+        if (status && message) {
+            setMsg({type: status, text: message});
+        }
+    }, []);
 
     useEffect (() => {
         setTimeout(function () {
-            setMsg("");
+            setMsg({type: "", text: ""});
         }, 5000);
     }, [msg]);
 
     const handleInputChange = (e, type) => {
+        setMsg({type: "", text: ""});
         switch(type) {
             case "user":
-                setError("");
                 setUser(e.target.value)
                 if (e.target.value === "") {
-                    setError("Username has been left blank");
+                    setMsg({type: "error", text: "Username has been left blank"});
                 }
                 break;
             case "pass":
-                setError("");
                 setPass(e.target.value);
                 if (e.target.value === "") {
-                    setError("Password has been left blank");
+                    setMsg({type: "error", text: "Password has been left blank"});
                 }  
                 break;
             default:  
@@ -162,31 +169,28 @@ function Login() {
                         localStorage.setItem('token', token.split(' ')[1]);
                         setTimeout(function() {
                             window.location.href = "/dashboard";
-                        }, 2000);
-                        setMsg(response.message);
+                        }, 1300);
                     }
                     else {
                         throw new Error("Token not found in response");
                     }
-                } else {
-                    setError(response.message);
-                }
+                } 
+                setMsg({type: response.status, text: response.message});
             })
             .catch((err) => {
-                setError("Error occurred while logging in");
+                setMsg({type: "error", text: 'An error occurred while logging in'});
                 console.log(err);
             });
         } else {
-            setError("All fields are required!")
+            setMsg({type: "error", text: "All fields are required!"});
         }
     }
     
     return (
         <div className='form'>
             <p>
-                {error !== "" ? 
-                <span className='error'>{error}</span> : 
-                <span className='success'>{msg}</span>}
+                {msg.text !== "" && 
+                <span className={msg.type}>{msg.text}</span>}
             </p>
             <label> Username </label>
             <input

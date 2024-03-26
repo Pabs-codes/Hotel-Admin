@@ -7,8 +7,7 @@ import './Dash.css';
 import Logout from './Logout';
 
 function Dashboard() {
-    const [error, setError] = useState(null);
-    const [msg, setMsg] = useState(null);
+    const [msg, setMsg] = useState({type: "", text: ""});
     const [reservations, setReservations] = useState([]);
 
     const getReservations = () => {
@@ -27,12 +26,18 @@ function Dashboard() {
                     setReservations(res.data);
                 }
                 else {
-                    setError('Error fetching reservations');
+                    if(res.status === 'expired') {
+                        localStorage.removeItem('token');
+                        window.location.href = `/?status=${res.status}&message=${res.message}`;
+                    }
                     console.error(res.message);
                 }
 
             })
-            .catch(error => console.error('Error fetching reservations:', error));
+            .catch(error => {
+                setMsg({type: 'error', text: 'Error fetching reservations'});
+                console.error('Error fetching reservations:', error)
+            });
     }
 
     useEffect(() => {
@@ -54,14 +59,20 @@ function Dashboard() {
                 .then(response => response.json())
                 .then(res => {
                     if(res.status === 'success') {
-                        setMsg(res.message);
                         getReservations();
                     }
                     else {
-                        setError(res.message); 
+                        if(res.status === 'expired') {
+                            localStorage.removeItem('token');
+                            window.location.href = `/?status=${res.status}&message=${res.message}`;
+                        }
                     }
+                    setMsg({type: res.status, text: res.message});
                 })
-                .catch(error => console.error('Error deleting reservation:', error));
+                .catch(error => {
+                    console.error(error)
+                    setMsg({type: 'error', text: 'Error deleting reservation'});
+                });
         }
     };
 
@@ -77,12 +88,8 @@ function Dashboard() {
     return (
         <div className='dashboard-container'>
             <span>
-                {error !== ""  && 
-                <span className='error'>{error}</span>
-                }
-                {msg !== ""  &&
-                <span className='success'>{msg}</span>
-                }
+                {msg.text !== "" &&
+                <span className={msg.type}>{msg.text}</span>}
             </span>
             <div style={{float:'right'}}>
                 <Logout/>
