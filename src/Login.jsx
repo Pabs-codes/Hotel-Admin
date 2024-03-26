@@ -117,11 +117,6 @@ function Login() {
         }
     }, []);
 
-    useEffect (() => {
-        setTimeout(function () {
-            setMsg({type: "", text: ""});
-        }, 5000);
-    }, [msg]);
 
     const handleInputChange = (e, type) => {
         setMsg({type: "", text: ""});
@@ -145,7 +140,7 @@ function Login() {
     function loginSubmit() {
         if (user !== "" && pass !== "") {
             var token;
-            var url = "http://localhost/backend/admin/login.php";
+            var url = "https://api.sunshinegrand.lk/admin/login.php";
             var headers = {
                 "Accept": "application/json",
                 "Content-type": "application/json",

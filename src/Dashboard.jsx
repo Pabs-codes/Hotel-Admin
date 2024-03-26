@@ -11,7 +11,7 @@ function Dashboard() {
     const [reservations, setReservations] = useState([]);
 
     const getReservations = () => {
-        fetch('http://localhost/backend/admin/view-reservations.php',{
+        fetch('https://api.sunshinegrand.lk/admin/view-reservations.php',{
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -48,7 +48,7 @@ function Dashboard() {
     const deleteReservation = id => {
         const confirmDelete = window.confirm('Are you sure you want to delete this reservation?');
         if (confirmDelete) {
-            fetch(`http://localhost/backend/admin/delete-reservation.php?id=${id}`, {
+            fetch(`https://api.sunshinegrand.lk/admin/delete-reservation.php?id=${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Accept': 'application/json',
