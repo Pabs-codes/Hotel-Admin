@@ -122,7 +122,7 @@ function Dashboard() {
                             <td>{reservation.phone}</td>
                             <td>{reservation.email}</td>
                             <td>{reservation.eventDate}</td>
-                            <td>{reservation.startTime}</td>
+                            <td>{reservation.eventStartTime}</td>
                             <td>{reservation.eventType}</td>
                             <td>{reservation.mealType}</td>
                             <td>{reservation.numberOfPeople}</td>
