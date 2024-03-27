@@ -108,7 +108,6 @@ function Dashboard() {
                         <th>Event Type</th>
                         <th>Meal Type</th>
                         <th>No. of People</th>
-                        <th>Equipment</th>
                         <th>Remarks</th>
                         <th>Actions</th>
                     </tr>
@@ -126,7 +125,6 @@ function Dashboard() {
                             <td>{reservation.eventType}</td>
                             <td>{reservation.mealType}</td>
                             <td>{reservation.numberOfPeople}</td>
-                            <td>{reservation.equipment}</td>
                             <td>{reservation.remarks}</td>
                             <td>
                                 <button onClick={() => deleteReservation(reservation.id)} className='delete-btn'>Delete</button>

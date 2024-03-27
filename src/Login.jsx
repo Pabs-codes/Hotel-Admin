@@ -80,7 +80,7 @@ function Login() {
 
   return (
     <>
-      <section className="vh-100" style={{ backgroundColor: "#0000" , width: "auto"}}>
+      <section className="vh-100" style={{ backgroundColor: "#00004B" , width: "auto"}}>
         <div className="container  h-100" >
           <div className="row d-flex justify-content-center align-items-center h-100">
             <div className="col col-xl-10">
