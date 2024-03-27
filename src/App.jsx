@@ -2,6 +2,7 @@ import { BrowserRouter, Routes , Route } from "react-router-dom"
 import Dashboard from "./Dashboard";
 import Login from "./Login";
 import ProtectedPage from "./ProtectedPage";
+import config from "./config-loader";
 
 
 function App() {
@@ -10,8 +11,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Login/>} />
-        <Route path="/dashboard" element={<ProtectedPage page={<Dashboard/>}/>}/>
+        <Route path="/" element={<Login apiUrl={config?.API_URL} />} />
+        <Route path="/dashboard" element={<ProtectedPage page={<Dashboard apiUrl={config?.API_URL}/>}/>}/>
       </Routes>
     </BrowserRouter>
   )
