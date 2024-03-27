@@ -1,18 +1,28 @@
 import { BrowserRouter, Routes , Route } from "react-router-dom"
 import Dashboard from "./Dashboard";
 import Login from "./Login";
+import { useState } from "react";
 import ProtectedPage from "./ProtectedPage";
-import config from "./config-loader";
 
 
 function App() {
- 
+
+  const [apiUrl, setApiUrl] = useState('')
+  
+  fetch('config.json')
+    .then(response => response.json())
+    .then(data => {
+      setApiUrl(data.API_URL)
+    })
+    .catch(error => {
+      console.error('Error fetching config:', error)
+    })
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Login apiUrl={config?.API_URL} />} />
-        <Route path="/dashboard" element={<ProtectedPage page={<Dashboard apiUrl={config?.API_URL}/>}/>}/>
+        <Route path="/" element={<Login apiUrl={apiUrl} />} />
+        <Route path="/dashboard" element={<ProtectedPage page={<Dashboard apiUrl={apiUrl}/>}/>}/>
       </Routes>
     </BrowserRouter>
   )

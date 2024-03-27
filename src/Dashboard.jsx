@@ -42,8 +42,8 @@ function Dashboard({apiUrl}) {
     }
 
     useEffect(() => {
-        getReservations();
-    }, []);
+        apiUrl && getReservations();
+    }, [apiUrl]);
 
     // Function to delete a reservation
     const deleteReservation = id => {
