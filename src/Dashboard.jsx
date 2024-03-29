@@ -5,13 +5,14 @@
 import  { useState, useEffect } from 'react';
 import './Dash.css';
 import Logout from './Logout';
+import PropTypes from 'prop-types';
 
-function Dashboard() {
+function Dashboard({apiUrl}) {
     const [msg, setMsg] = useState({type: "", text: ""});
     const [reservations, setReservations] = useState([]);
 
     const getReservations = () => {
-        fetch('https://api.sunshinegrand.lk/admin/view-reservations.php',{
+        fetch(`${apiUrl}admin/view-reservations.php`,{
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -41,14 +42,14 @@ function Dashboard() {
     }
 
     useEffect(() => {
-        getReservations();
-    }, []);
+        apiUrl && getReservations();
+    }, [apiUrl]);
 
     // Function to delete a reservation
     const deleteReservation = id => {
         const confirmDelete = window.confirm('Are you sure you want to delete this reservation?');
         if (confirmDelete) {
-            fetch(`https://api.sunshinegrand.lk/admin/delete-reservation.php?id=${id}`, {
+            fetch(`${apiUrl}/admin/delete-reservation.php?id=${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Accept': 'application/json',
@@ -144,3 +145,6 @@ function Dashboard() {
 
 export default Dashboard;
 
+Dashboard.propTypes = {
+    apiUrl: PropTypes.string.isRequired
+};

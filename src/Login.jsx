@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import bg from "./assets/adminbg.png"
+import PropTypes from "prop-types";
 
 
-function Login() {
+function Login({apiUrl}) {
   const [user, setUser] = useState("");
   const [pass, setPass] = useState("");
   const [msg, setMsg] = useState({ type: "", text: "" });
@@ -38,7 +39,7 @@ function Login() {
   function loginSubmit() {
     if (user !== "" && pass !== "") {
       var token;
-      var url = "https://api.sunshinegrand.lk/admin/login.php";
+      var url = `${apiUrl}admin/login.php`;
       var headers = {
         Accept: "application/json",
         "Content-type": "application/json",
@@ -177,3 +178,7 @@ function Login() {
 }
 
 export default Login;
+
+Login.propTypes = {
+  apiUrl: PropTypes.string.isRequired,
+};
